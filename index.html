@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>V2Studios</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Manrope:wght@400;500;700&display=swap">
+<style>
+:root{--bg:#07060d;--panel:rgba(255,255,255,.045);--line:rgba(255,255,255,.1);--text:#f3f1fa;--mut:#9a95b3;--a1:#8b5cf6;--a2:#ec4899;--a3:#22d3ee;--ok:#34d399;--bad:#f87171;--grad:linear-gradient(120deg,var(--a1),var(--a2) 55%,var(--a3));--fd:'Unbounded','Trebuchet MS',sans-serif;--fb:'Manrope','Segoe UI',Arial,sans-serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f6f4fc;--panel:rgba(20,10,60,.05);--line:rgba(20,10,60,.14);--text:#16122b;--mut:#5d5778}}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*{box-sizing:border-box;margin:0}
+body{height:100%;background:var(--bg);color:var(--text);font-family:var(--fb);overflow:hidden}
+.orb{position:fixed;border-radius:50%;filter:blur(90px);opacity:.35;pointer-events:none;animation:float 14s ease-in-out infinite alternate}
+.o1{width:480px;height:480px;background:var(--a1);top:-120px;left:-100px}.o2{width:420px;height:420px;background:var(--a2);bottom:-140px;left:30%;animation-delay:-5s}.o3{width:360px;height:360px;background:var(--a3);top:20%;right:-120px;animation-delay:-9s;opacity:.22}
+@keyframes float{to{transform:translate(60px,40px) scale(1.15)}}
+.hidden{display:none!important}
+button{font:inherit;color:inherit;cursor:pointer}
+.btn{border:0;border-radius:12px;padding:12px 20px;font-weight:700;background:var(--grad);color:#fff;transition:transform .15s,box-shadow .2s;box-shadow:0 8px 30px -8px var(--a1)}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 36px -6px var(--a2)}.btn:disabled{opacity:.6;transform:none}
+.btn.ghost{background:var(--panel);border:1px solid var(--line);box-shadow:none}
+.btn.disc{background:#5865f2;box-shadow:0 8px 30px -10px #5865f2;width:100%}
+input{width:100%;padding:13px 14px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--text);font:inherit;outline:0}
+input:focus{border-color:var(--a1);box-shadow:0 0 0 3px rgba(139,92,246,.25)}
+label{display:block;font-size:12px;color:var(--mut);margin:14px 0 6px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.glass{background:var(--panel);border:1px solid var(--line);border-radius:20px;backdrop-filter:blur(14px)}
+/* auth */
+#auth{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:20px;background:var(--bg);overflow:auto}
+.abox{width:min(420px,100%);padding:32px;position:relative}
+.logo{font-family:var(--fd);font-weight:900;font-size:22px;letter-spacing:-.02em}.logo b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tabs{display:flex;gap:6px;margin:22px 0 4px;padding:4px;background:var(--panel);border-radius:12px}
+.tabs button{flex:1;border:0;background:0;padding:9px;border-radius:9px;font-weight:700;color:var(--mut)}.tabs button.on{background:var(--grad);color:#fff}
+.or{text-align:center;color:var(--mut);font-size:12px;margin:16px 0;display:flex;align-items:center;gap:10px}.or:before,.or:after{content:'';flex:1;height:1px;background:var(--line)}
+.err{color:var(--bad);font-size:13px;margin-top:10px;min-height:18px}
+/* app */
+#app{position:relative;display:flex;height:100%}
+main{flex:1;overflow:auto;padding:36px clamp(18px,4vw,56px) 60px}
+aside{width:250px;flex:none;display:flex;flex-direction:column;padding:26px 18px;border-right:1px solid var(--line);background:rgba(10,8,20,.55);backdrop-filter:blur(16px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) aside{background:rgba(255,255,255,.6)}}
+nav{margin-top:34px;display:flex;flex-direction:column;gap:6px;flex:1}
+nav button{display:flex;gap:12px;align-items:center;text-align:left;border:1px solid transparent;background:0;padding:13px 14px;border-radius:12px;font-weight:700;color:var(--mut);transition:.15s}
+nav button:hover{color:var(--text);background:var(--panel)}nav button.on{color:#fff;background:var(--grad);box-shadow:0 8px 26px -10px var(--a1)}
+.me{padding:12px;display:flex;flex-direction:column;gap:10px}
+.who{display:flex;align-items:center;gap:10px;min-width:0}.av{width:38px;height:38px;border-radius:50%;background:var(--grad);display:grid;place-items:center;font-weight:900;flex:none}
+.who b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.who small{color:var(--mut)}
+.lang{display:flex;gap:6px}.lang button{flex:1;padding:8px;border-radius:9px;border:1px solid var(--line);background:0;font-weight:700;color:var(--mut)}.lang button.on{border-color:var(--a1);color:var(--text);background:rgba(139,92,246,.2)}
+.out{font-size:12px;color:var(--mut);background:0;border:0;text-align:left;padding:2px}
+h1{font-family:var(--fd);font-size:clamp(26px,3.4vw,40px);letter-spacing:-.03em;line-height:1.1}
+h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--mut);margin-top:8px}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:26px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:22px}
+.stat{padding:20px}.stat b{font-family:var(--fd);font-size:30px;display:block}.stat span{color:var(--mut);font-size:13px}
+.srvs{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+.srv{padding:20px}.srv h3{font-size:18px;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.pill{font-size:11px;font-weight:800;padding:4px 10px;border-radius:99px;background:rgba(52,211,153,.15);color:var(--ok);display:inline-flex;gap:6px;align-items:center}.pill:before{content:'';width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor}
+.pill.off{background:rgba(248,113,113,.15);color:var(--bad)}
+.key{font-family:ui-monospace,Consolas,monospace;color:var(--mut);font-size:13px;margin:10px 0}
+.bar{height:8px;border-radius:9px;background:var(--panel);overflow:hidden;margin:8px 0 6px}.bar i{display:block;height:100%;background:var(--grad);border-radius:9px;transition:width .6s}
+.row{display:flex;justify-content:space-between;font-size:13px;color:var(--mut)}
+.rm{background:0;border:0;color:var(--mut);font-size:12px;margin-top:10px;padding:0}.rm:hover{color:var(--bad)}
+.empty{padding:50px 20px;text-align:center;border:1px dashed var(--line);border-radius:20px;color:var(--mut)}
+.demo{margin-top:26px;font-size:12px;color:var(--mut)}
+/* manage */
+.modal .abox{max-height:92vh;overflow:auto}
+.srv{border-top:3px solid var(--sc,var(--a1))}
+.srv .bar i{background:var(--sc,var(--a1))}
+.srv h3 .sn,.pv .sn{display:flex;align-items:center;gap:10px;min-width:0}
+.nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.slogo{width:36px;height:36px;border-radius:10px;object-fit:cover;flex:none;display:grid;place-items:center;font-weight:900;font-size:16px;color:#fff;background:var(--sc,var(--a1))}
+img.slogo{background:var(--panel)}
+.acts{display:flex;gap:18px;margin-top:10px}.acts .rm{margin-top:0}.rm.gm:hover{color:var(--text)}
+.pv{padding:14px 16px;margin:16px 0 4px;border-top:3px solid var(--sc,var(--a1));font-size:18px;font-weight:700}
+.colrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+input[type=color]{width:52px;height:44px;padding:4px;cursor:pointer;flex:none}
+.sw{display:flex;gap:8px;flex-wrap:wrap}.swb{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);padding:0;transition:transform .15s}.swb:hover{transform:scale(1.15)}
+.logorow{display:flex;gap:10px;flex-wrap:wrap}.logorow .btn{padding:10px 14px}
+.hint{font-size:12px;color:var(--mut);margin-top:8px}
+
+/* offers */
+.hero{padding:34px;margin-bottom:26px;position:relative;overflow:hidden}
+.hero:after{content:'';position:absolute;right:-60px;top:-60px;width:260px;height:260px;background:var(--grad);filter:blur(80px);opacity:.35}
+.hero p{max-width:640px}.kpis{display:flex;gap:30px;flex-wrap:wrap;margin-top:24px;position:relative;z-index:1}.kpis b{font-family:var(--fd);font-size:28px;display:block;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}.kpis span{color:var(--mut);font-size:13px}
+.warn{margin-top:18px;color:var(--mut);position:relative;z-index:1}
+.offers{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:18px;align-items:stretch}
+.card{padding:26px;display:flex;flex-direction:column;position:relative;transition:transform .2s,border-color .2s}.card:hover{transform:translateY(-5px);border-color:var(--a1)}
+.card.pop{border-color:var(--a2);box-shadow:0 0 0 1px var(--a2),0 20px 60px -20px var(--a2)}
+.tag{position:absolute;top:-12px;right:18px;background:var(--grad);color:#fff;font-size:11px;font-weight:800;padding:5px 12px;border-radius:99px}
+.disc{display:inline-block;font-size:12px;font-weight:800;color:var(--a2);margin-bottom:8px}
+.card h3{font-family:var(--fd);font-size:16px}.card p.d{color:var(--mut);font-size:13px;margin:6px 0 14px;min-height:36px}
+.price{font-family:var(--fd);font-size:36px;font-weight:900}.price small{font-size:14px;color:var(--mut);font-weight:500;font-family:var(--fb)}.price s{font-size:15px;color:var(--mut);font-weight:500;margin-left:6px}
+.save{font-size:12px;color:var(--ok);margin:4px 0}
+.card ul{list-style:none;padding:0;margin:16px 0 20px;display:grid;gap:9px;flex:1;font-size:13.5px}.card li{display:flex;gap:9px}.card li:before{content:'✓';color:var(--a3);font-weight:900}
+.card .btn{text-align:center;text-decoration:none;display:block;width:100%}
+.recap{padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--panel);margin:16px 0}.recap small{color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:700}.recap .big{font-family:var(--fd);font-size:34px;font-weight:900;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.steps{padding-left:20px;display:grid;gap:8px;color:var(--mut);font-size:14px;margin:0 0 16px}.steps b{color:var(--text)}
+.msgbox{font-size:13px;padding:12px;border-radius:12px;background:var(--panel);border:1px dashed var(--line);color:var(--mut);margin-bottom:10px;user-select:all}
+.modal{position:fixed;inset:0;z-index:40;background:rgba(5,3,12,.7);display:grid;place-items:center;padding:20px;backdrop-filter:blur(6px)}
+.modal .abox{animation:pop .2s}@keyframes pop{from{transform:scale(.94);opacity:0}}
+.x{position:absolute;top:14px;right:16px;background:0;border:0;font-size:20px;color:var(--mut)}
+@media (max-width:820px){#app{flex-direction:column-reverse}aside{width:100%;flex-direction:row;align-items:center;padding:10px;border-left:0;border-top:1px solid var(--line);gap:8px;overflow-x:auto}aside .logo,.me .who small{display:none}nav{flex-direction:row;margin:0;flex:none}nav button{padding:10px}.me{flex-direction:row;align-items:center;padding:0;flex:none}.out{display:none}}
+</style>
+</head>
+<body>
+<div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+
+<section id="auth">
+  <div class="abox glass">
+    <div class="logo">V2<b>Studios</b></div>
+    <div class="tabs"><button id="tL" class="on"></button><button id="tR"></button></div>
+    <div id="fName" class="hidden"><label id="lName"></label><input id="iName" autocomplete="username"></div>
+    <label id="lMail"></label><input id="iMail" type="email" autocomplete="email">
+    <label id="lPass"></label><input id="iPass" type="password" autocomplete="current-password">
+    <div class="err" id="aErr"></div>
+    <button class="btn" id="aGo" style="width:100%;margin-top:6px"></button>
+    <div class="or" id="aOr"></div>
+    <button class="btn disc" id="aDisc"></button>
+  </div>
+</section>
+
+<div id="app" class="hidden">
+  <aside>
+    <div class="logo">V2<b>Studios</b></div>
+    <nav>
+      <button data-p="dash" id="nDash"></button>
+      <button data-p="offers" id="nOff"></button>
+    </nav>
+    <div class="me glass">
+      <div class="who"><div class="av" id="av"></div><div style="min-width:0"><b id="uName"></b><small id="uProv"></small></div></div>
+      <div class="lang"><button data-l="fr">🇫🇷 FR</button><button data-l="en">🇬🇧 EN</button></div>
+      <button class="out" id="logout"></button>
+    </div>
+  </aside>
+  <main id="view"></main>
+</div>
+
+<div id="modal" class="modal hidden"></div>
+
+<script>
+/* ===== CONFIG ===== */
+const CONFIG={
+  DISCORD_INVITE:'https://discord.gg/v2studios',
+  BOT_INVITE:'https://discord.com/oauth2/authorize?client_id=1558229475848753172',
+    OFFERS:[
+    {id:'w',price:10,per:'w',was:100,off:40,url:'https://tebex.invek.shop/package/7686725'},
+    {id:'m',price:25,per:'m',was:350,off:43,pop:1,save:40,url:'https://tebex.invek.shop/package/7686724'},
+    {id:'q',price:50,per:'q',url:'#'},   // TODO: lien Tebex 3 mois
+    {id:'l',price:150,per:'l',url:'#'}   // TODO: lien Tebex Lifetime
+  ]};
+/* ===== i18n ===== */
+const F={ // fonctionnalités
+ opt:['Ultra-optimized base — smooth even at 500+ players, no launch-night crash','Base ultra-optimisée — fluide même à 500+ joueurs, aucun crash au lancement'],
+ ac:['In-house anti-cheat built in — cheaters out from minute one, no third-party subscription','Anti-cheat maison intégré — les tricheurs dehors dès la minute 1, sans abonnement tiers'],
+ cfg:['99% configurable in-game — launch your server without writing a single line of code','Configurable à 99% en jeu — lance ton serveur sans écrire une ligne de code'],
+ live:['Live in under 10 minutes — play tonight, not in 3 weeks','En ligne en moins de 10 minutes — joue ce soir, pas dans 3 semaines'],
+ hud:['Fully modular HUD — a unique identity, with no design limits','HUD 100% modulable — une identité unique, sans limite de design'],
+ upd:['Free lifetime updates — your base never goes stale','Mises à jour gratuites à vie — ta base ne devient jamais obsolète'],
+ upd2:['Free lifetime updates + early access to new features','Mises à jour gratuites à vie + accès anticipé aux nouveautés'],
+ sup:['Community support on Discord','Support communautaire sur Discord'],
+ sup2:['Priority support — you skip the queue','Support prioritaire — tu passes devant la file'],
+ onb:['Personal 1:1 onboarding — we configure the base around your concept','Accompagnement 1:1 — on configure la base autour de ton concept'],
+ inst:['Turnkey install on your VPS/dedicated server — we handle everything (free)','Installation clé en main sur ton VPS/dédié — on s\'occupe de tout (gratuit)'],
+ any:['Compatible with any host','Compatible avec tous les hébergeurs']};
+const LIC={w:['7-day license','Licence 7 jours'],m:['30-day license — compatible with any host','Licence 30 jours — compatible avec tous les hébergeurs'],q:['90-day license — compatible with any host','Licence 90 jours — compatible avec tous les hébergeurs'],l:['Lifetime license — pay once, use forever','Licence à vie — tu paies une fois, pour toujours']};
+const FEAT={w:['opt','ac','cfg','live','hud','upd','sup','onb','inst'],m:['opt','ac','cfg','live','hud','upd2','sup2','onb','inst'],q:['opt','ac','cfg','live','hud','upd2','sup2','onb','inst'],l:['opt','ac','cfg','live','hud','upd2','sup2','onb','inst']};
+const T={en:{login:'Log in',reg:'Sign up',name:'Username',mail:'Email',pass:'Password',go1:'Log in',go2:'Create my account',or:'or',disc:'Continue with Discord',dash:'Dashboard',offers:'Our offers',out:'Log out',
+ dT:'Your <em>servers</em>',dS:'Manage your licenses and watch your servers live.',add:'+ Add',bot:'Invite the bot',sv:'Servers',on:'Online',pl:'Connected players',none:'No server yet. Click “+ Add” and enter your server key.',
+ aT:'Add a server',sn:'Server name',sk:'Server key',act:'Activate the license',busy:'Checking…',kerr:'Invalid key (8+ characters, letters, digits or dashes).',dup:'This key is already activated.',off:'Offline',remove:'Remove',key:'Key',pk:'Players',demo:'Demo mode: servers and players are simulated until the API is connected.',
+ oT:'Our <em>offers</em>',oS:'Pick your license and launch tonight.',h:'BaseV3 — The FiveM reference',hq:'What if your server base… was already used by the biggest names?',hp:'Intensity, Serenity and many more — they all chose Base V3.',k1:'simultaneous players on a single server',k2:'present on FiveM',k3:'among the references',warn:'⚡ Don\'t waste time on unstable solutions. Don\'t waste time on capped bases: enjoy unlimited player capacity right now.',
+ w:'Offer 1 — Weekly',wd:'Perfect to try it out or for a short-term project',m:'Offer 2 — Monthly',md:'Best value for a serious, long-term project',q:'Offer 3 — 3 Months',qd:'The sweet spot for a server that\'s taking off',l:'Offer 4 — Lifetime',ld:'Pay once. Your base forever.',
+ pw:'week',pm:'month',pq:'3 months',pl2:'one-time',pop:'Most popular',buy:'Buy',tk:'Open a ticket to buy',tkS:'Payment is handled by our team on Discord. It takes a few minutes.',tkO:'Your order',tk1:'Join our Discord',tk2:'Open a ticket in the tickets channel',tk3:'Send this message and pay',tk4:'Receive your license key, then activate it in your dashboard',join:'discord.gg/v2studios',copy:'Copy message',copied:'Copied ✓',msg:'Hello! I would like to buy BaseV3 — {o} ({p}€). My V2Studios account: {u}',save:'You save {n}€ vs paying weekly',soon:'Link coming soon',user:'Player',mg:'Manage',mgT:'Manage your server',mgS:'Change the name, logo and color.',colr:'Color',logoL:'Logo',pick:'Choose an image',rmLogo:'Remove logo',logoH:'PNG, JPG or WebP, cropped to a square.',saveB:'Save'},
+ fr:{login:'Connexion',reg:'Inscription',name:'Pseudo',mail:'E-mail',pass:'Mot de passe',go1:'Se connecter',go2:'Créer mon compte',or:'ou',disc:'Continuer avec Discord',dash:'Dashboard',offers:'Nos offres',out:'Se déconnecter',
+ dT:'Tes <em>serveurs</em>',dS:'Gère tes licences et suis tes serveurs en direct.',add:'+ Ajouter',bot:'Inviter le bot',sv:'Serveurs',on:'En ligne',pl:'Joueurs connectés',none:'Aucun serveur pour l\'instant. Clique sur « + Ajouter » et entre ta clé de serveur.',
+ aT:'Ajouter un serveur',sn:'Nom du serveur',sk:'Clé du serveur',act:'Activer la licence',busy:'Vérification…',kerr:'Clé invalide (8+ caractères, lettres, chiffres ou tirets).',dup:'Cette clé est déjà activée.',off:'Hors ligne',remove:'Retirer',key:'Clé',pk:'Joueurs',demo:'Mode démo : serveurs et joueurs sont simulés tant que l\'API n\'est pas connectée.',
+ oT:'Nos <em>offres</em>',oS:'Choisis ta licence et lance-toi ce soir.',h:'BaseV3 — La référence FiveM',hq:'Et si ta base de serveur… était déjà utilisée par les plus grands ?',hp:'Intensity, Serenity et bien d\'autres — tous ont choisi Base V3.',k1:'joueurs simultanés sur un seul serveur',k2:'sur FiveM',k3:'parmi les références',warn:'⚡ Ne perds pas de temps avec des solutions instables ni des bases plafonnées : profite d\'une capacité de joueurs illimitée dès maintenant.',
+ w:'Offre 1 — Hebdo',wd:'Parfait pour tester ou pour un projet court',m:'Offre 2 — Mensuel',md:'Le meilleur choix pour un projet sérieux et durable',q:'Offre 3 — 3 mois',qd:'Le bon compromis pour un serveur qui décolle',l:'Offre 4 — Lifetime',ld:'Tu paies une fois. Ta base pour toujours.',
+ pw:'semaine',pm:'mois',pq:'3 mois',pl2:'paiement unique',pop:'Le plus populaire',buy:'Acheter',tk:'Ouvre un ticket pour acheter',tkS:'Le paiement se fait avec notre équipe sur Discord. Ça prend quelques minutes.',tkO:'Ta commande',tk1:'Rejoins notre Discord',tk2:'Ouvre un ticket dans le salon des tickets',tk3:'Envoie ce message et paie',tk4:'Reçois ta clé de licence, puis active-la dans ton dashboard',join:'discord.gg/v2studios',copy:'Copier le message',copied:'Copié ✓',msg:'Bonjour ! Je souhaite acheter BaseV3 — {o} ({p}€). Mon compte V2Studios : {u}',save:'Tu économises {n}€ vs paiement hebdo',soon:'Lien bientôt dispo',user:'Joueur',mg:'Gérer',mgT:'Gérer ton serveur',mgS:'Change le nom, le logo et la couleur.',colr:'Couleur',logoL:'Logo',pick:'Choisir une image',rmLogo:'Retirer le logo',logoH:'PNG, JPG ou WebP, recadrée en carré.',saveB:'Enregistrer'}};
+/* ===== utils ===== */
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const st={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let lang=st.get('v2s_lang',(navigator.language||'fr').startsWith('fr')?'fr':'en'),user=st.get('v2s_session',null),page='dash',mode='login',servers=[];
+const t=k=>T[lang][k]||k;
+async function sha(s){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return btoa(s)}}
+/* ===== API ===== */
+const api=async(p,o={})=>{const r=await fetch('/api'+p,{method:o.method||'GET',headers:{'Content-Type':'application/json'},body:o.body?JSON.stringify(o.body):undefined,credentials:'same-origin'});let j={};try{j=await r.json()}catch(e){}if(!r.ok)throw Object.assign(new Error(j.error||'error'),{code:j.error||'server'});return j};
+const ERR={fr:{bad_input:'Vérifie les champs (e-mail valide, mot de passe de 8+ caractères).',exists:'Un compte existe déjà avec cet e-mail.',bad_creds:'Identifiants incorrects.',rate:'Trop de tentatives, réessaie dans une minute.',expired:'Cette licence a expiré.',auth:'Session expirée, reconnecte-toi.',server:'Erreur serveur, réessaie.',bad_name:'Donne un nom à ton serveur.',bad_color:'Couleur invalide.',bad_image:'Image invalide (PNG, JPG ou WebP, pas trop lourde).',not_found:'Serveur introuvable.'},
+ en:{bad_input:'Check the fields (valid email, 8+ character password).',exists:'An account already exists with this email.',bad_creds:'Wrong credentials.',rate:'Too many attempts, try again in a minute.',expired:'This license has expired.',auth:'Session expired, please log in again.',server:'Server error, try again.',bad_name:'Give your server a name.',bad_color:'Invalid color.',bad_image:'Invalid image (PNG, JPG or WebP, not too large).',not_found:'Server not found.'}};
+const errMsg=x=>x.code=='invalid_key'?t('kerr'):x.code=='used'?t('dup'):(ERR[lang][x.code]||ERR[lang].server);
+/* ===== auth ===== */
+function drawAuth(){
+ $('#tL').textContent=t('login');$('#tR').textContent=t('reg');$('#lName').textContent=t('name');$('#lMail').textContent=t('mail');$('#lPass').textContent=t('pass');
+ $('#aGo').textContent=mode=='login'?t('go1'):t('go2');$('#aOr').textContent=t('or');$('#aDisc').innerHTML='<span style="margin-right:8px">🎮</span>'+t('disc');
+ $('#fName').classList.toggle('hidden',mode=='login');$('#tL').classList.toggle('on',mode=='login');$('#tR').classList.toggle('on',mode!='login');
+}
+$('#tL').onclick=()=>{mode='login';drawAuth()};$('#tR').onclick=()=>{mode='reg';drawAuth()};
+$('#aGo').onclick=async()=>{
+ const e=$('#aErr'),b=$('#aGo');e.textContent='';b.disabled=true;
+ try{start(await api(mode=='login'?'/login':'/register',{method:'POST',body:{name:$('#iName').value.trim(),email:$('#iMail').value.trim(),password:$('#iPass').value}}))}
+ catch(x){e.textContent=errMsg(x)}finally{b.disabled=false}
+};
+$('#aDisc').onclick=()=>{location.href='/auth/discord'};
+async function start(u){user=u;servers=await api('/servers').catch(()=>[]);$('#auth').classList.add('hidden');$('#app').classList.remove('hidden');draw()}
+$('#logout').onclick=async()=>{await api('/logout',{method:'POST'}).catch(()=>{});user=null;servers=[];$('#app').classList.add('hidden');$('#auth').classList.remove('hidden');$('#iPass').value=''};
+/* ===== app ===== */
+function draw(){
+ document.documentElement.lang=lang;
+ $('#nDash').innerHTML='▦ '+t('dash');$('#nOff').innerHTML='✦ '+t('offers');$('#logout').textContent=t('out');
+ $$('nav button').forEach(b=>b.classList.toggle('on',b.dataset.p==page));$$('.lang button').forEach(b=>b.classList.toggle('on',b.dataset.l==lang));
+ $('#uName').textContent=user.name;$('#uProv').textContent=user.prov=='discord'?'Discord':'V2Studios';$('#av').textContent=user.name[0].toUpperCase();
+ $('#view').innerHTML=page=='dash'?dash():offers();bind();
+}
+function dash(){
+ const on=servers.filter(s=>s.online),pl=on.reduce((a,s)=>a+s.players,0);
+ return `<div class="head"><div><h1>${t('dT')}</h1><p class="sub">${t('dS')}</p></div><div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn ghost" style="text-decoration:none" href="${CONFIG.BOT_INVITE}" target="_blank" rel="noopener">🤖 ${t('bot')}</a><button class="btn" id="add">${t('add')}</button></div></div>
+ <div class="stats"><div class="stat glass"><b>${servers.length}</b><span>${t('sv')}</span></div><div class="stat glass"><b>${on.length}</b><span>${t('on')}</span></div><div class="stat glass"><b>${pl}</b><span>${t('pl')}</span></div></div>
+ ${servers.length?`<div class="srvs">${servers.map((s,i)=>`<div class="srv glass" style="--sc:${sc(s)}"><h3><span class="sn">${avatar(s)}<span class="nm">${esc(s.name)}</span></span><span class="pill ${s.online?'':'off'}">${s.online?t('on'):t('off')}</span></h3>
+ <div class="key">${t('key')} · ${esc(s.key.slice(0,4))}••••••••</div><div class="bar"><i style="width:${Math.min(100,s.players/s.max*100)}%"></i></div>
+ <div class="row"><span>${t('pk')}</span><b>${s.players} / ${s.max}</b></div><div class="acts"><button class="rm gm" data-mg="${i}">${t('mg')}</button><button class="rm" data-rm="${i}">${t('remove')}</button></div></div>`).join('')}</div>`:`<div class="empty">${t('none')}</div>`}`}
+function offers(){
+ const per=o=>({w:t('pw'),m:t('pm'),q:t('pq'),l:t('pl2')})[o.per];
+ return `<div class="head"><div><h1>${t('oT')}</h1><p class="sub">${t('oS')}</p></div></div>
+ <div class="hero glass"><h1 style="font-size:clamp(22px,2.6vw,32px)">${t('h')}</h1><p class="sub" style="font-size:17px;color:var(--text)">${t('hq')}</p><p class="sub">${t('hp')}</p>
+ <div class="kpis"><div><b>530</b><span>${t('k1')}</span></div><div><b>7+ ${lang=='fr'?'ans':'years'}</b><span>${t('k2')}</span></div><div><b>Intensity · Serenity</b><span>${t('k3')}</span></div></div><p class="warn">${t('warn')}</p></div>
+ <div class="offers">${CONFIG.OFFERS.map(o=>`<div class="card glass ${o.pop?'pop':''}">${o.pop?`<span class="tag">${t('pop')}</span>`:''}
+ ${o.off?`<span class="disc">🔥 -${o.off}%</span>`:''}<h3>${t(o.id)}</h3><p class="d">${t(o.id+'d')}</p>
+ <div class="price">${o.price}€<small> / ${per(o)}</small>${o.was?`<s>${o.was}€</s>`:''}</div>${o.save?`<div class="save">${t('save').replace('{n}',o.save)}</div>`:''}
+ <ul><li>${LIC[o.id][lang=='fr'?1:0]}</li>${FEAT[o.id].map(k=>`<li>${F[k][lang=='fr'?1:0]}</li>`).join('')}</ul>
+ <button class="btn" data-buy="${o.id}">${t('buy')}</button></div>`).join('')}</div>`}
+function bind(){
+ $$('nav button').forEach(b=>b.onclick=()=>{page=b.dataset.p;draw()});
+ $$('[data-buy]').forEach(b=>b.onclick=()=>openBuy(b.dataset.buy));
+ const a=$('#add');if(a)a.onclick=openAdd;
+ $$('[data-mg]').forEach(b=>b.onclick=()=>openManage(+b.dataset.mg));
+ $$('[data-rm]').forEach(b=>b.onclick=()=>{api('/servers/'+servers[+b.dataset.rm].id,{method:'DELETE'}).then(()=>{servers.splice(+b.dataset.rm,1);draw()})});
+}
+$$('.lang button').forEach(b=>b.onclick=()=>{lang=b.dataset.l;st.set('v2s_lang',lang);drawAuth();if(user)draw()});
+function openAdd(){
+ const m=$('#modal');m.classList.remove('hidden');
+ m.innerHTML=`<div class="abox glass"><button class="x" id="mx">✕</button><h1 style="font-size:24px">${t('aT')}</h1>
+ <label>${t('sn')}</label><input id="mName" maxlength="40" placeholder="My RP Server"><label>${t('sk')}</label><input id="mKey" placeholder="XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false">
+ <div class="err" id="mErr"></div><button class="btn" id="mGo" style="width:100%;margin-top:6px">${t('act')}</button></div>`;
+ $('#mx').onclick=()=>m.classList.add('hidden');m.onclick=e=>{if(e.target==m)m.classList.add('hidden')};
+ $('#mGo').onclick=async()=>{
+  const name=$('#mName').value.trim()||'Server '+(servers.length+1),key=$('#mKey').value.trim().toUpperCase(),e=$('#mErr'),b=$('#mGo');e.textContent='';
+  if(!/^[A-Z0-9-]{8,}$/.test(key)){e.textContent=t('kerr');return}
+  b.disabled=true;b.textContent=t('busy');
+  try{servers.push(await api('/servers',{method:'POST',body:{name,key}}));m.classList.add('hidden');draw()}
+  catch(x){e.textContent=errMsg(x);b.disabled=false;b.textContent=t('act')}
+ };
+}
+/* ===== gérer un serveur (nom, logo, couleur) ===== */
+const PRESETS=['#8b5cf6','#ec4899','#22d3ee','#34d399','#f59e0b','#ef4444','#3b82f6','#e5e7eb'];
+const sc=s=>s.color||'#8b5cf6';
+const logoV={};
+const logoUrl=s=>`/api/servers/${s.id}/logo?v=${logoV[s.id]||0}`;
+const avatar=s=>s.logo?`<img class="slogo" alt="" src="${logoUrl(s)}">`:`<span class="slogo">${esc([...(s.name||'?')][0].toUpperCase())}</span>`;
+function readLogo(file){return new Promise((ok,no)=>{
+ if(!/^image\/(png|jpeg|webp)$/.test(file.type))return no({code:'bad_image'});
+ const fr=new FileReader();fr.onerror=()=>no({code:'bad_image'});
+ fr.onload=()=>{const im=new Image();im.onerror=()=>no({code:'bad_image'});
+  im.onload=()=>{const S=256,c=document.createElement('canvas');c.width=c.height=S;
+   const x=c.getContext('2d'),r=Math.min(im.width,im.height);
+   x.drawImage(im,(im.width-r)/2,(im.height-r)/2,r,r,0,0,S,S);
+   let d=c.toDataURL('image/png');if(d.length>300000)d=c.toDataURL('image/jpeg',.85);
+   d.length>380000?no({code:'bad_image'}):ok(d)};
+  im.src=fr.result};
+ fr.readAsDataURL(file)})}
+function openManage(i){
+ const s=servers[i],m=$('#modal');
+ let color=sc(s),logo; // logo : undefined = inchangé, null = retiré, texte = nouvelle image (data URL)
+ m.classList.remove('hidden');
+ m.innerHTML=`<div class="abox glass"><button class="x" id="mx">✕</button><h1 style="font-size:24px">${t('mgT')}</h1><p class="sub" style="font-size:14px">${t('mgS')}</p>
+ <div class="pv glass" id="pv"></div>
+ <label>${t('sn')}</label><input id="gName" maxlength="40" value="${esc(s.name)}">
+ <label>${t('colr')}</label><div class="colrow"><input type="color" id="gCol" value="${esc(color)}"><div class="sw" id="gSw">${PRESETS.map(c=>`<button type="button" class="swb" data-c="${c}" style="background:${c}" aria-label="${c}"></button>`).join('')}</div></div>
+ <label>${t('logoL')}</label><div class="logorow"><button class="btn ghost" id="gPick" type="button">${t('pick')}</button><button class="btn ghost" id="gDel" type="button">${t('rmLogo')}</button></div>
+ <input type="file" id="gFile" class="hidden" accept="image/png,image/jpeg,image/webp"><p class="hint">${t('logoH')}</p>
+ <div class="err" id="gErr"></div><button class="btn" id="gGo" style="width:100%;margin-top:6px">${t('saveB')}</button></div>`;
+ const shown=()=>logo===undefined?(s.logo?logoUrl(s):''):(logo||'');
+ const paint=()=>{
+  const nm=$('#gName').value.trim()||s.name,src=shown(),pv=$('#pv');
+  pv.style.setProperty('--sc',color);
+  pv.innerHTML=`<span class="sn">${src?`<img class="slogo" alt="" src="${esc(src)}">`:`<span class="slogo">${esc([...nm][0].toUpperCase())}</span>`}<span class="nm">${esc(nm)}</span></span>`;
+ };
+ $('#mx').onclick=()=>m.classList.add('hidden');m.onclick=e=>{if(e.target==m)m.classList.add('hidden')};
+ $('#gName').oninput=paint;
+ $('#gCol').oninput=e=>{color=e.target.value;paint()};
+ $$('#gSw .swb').forEach(b=>b.onclick=()=>{color=b.dataset.c;$('#gCol').value=color;paint()});
+ $('#gPick').onclick=()=>$('#gFile').click();
+ $('#gDel').onclick=()=>{logo=null;paint()};
+ $('#gFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;$('#gErr').textContent='';
+  try{logo=await readLogo(f);paint()}catch(x){$('#gErr').textContent=errMsg(x)}e.target.value=''};
+ $('#gGo').onclick=async()=>{
+  const e=$('#gErr'),b=$('#gGo'),nm=$('#gName').value.trim();e.textContent='';
+  if(!nm){e.textContent=errMsg({code:'bad_name'});return}
+  b.disabled=true;
+  try{
+   let u=await api('/servers/'+s.id,{method:'PUT',body:{name:nm,color}});
+   if(logo!==undefined){u=await api('/servers/'+s.id+'/logo',{method:'PUT',body:{logo}});logoV[s.id]=Date.now()}
+   servers[i]=u;m.classList.add('hidden');draw();
+  }catch(x){e.textContent=errMsg(x);b.disabled=false}
+ };
+ paint();
+}
+
+function openBuy(id){
+ const o=CONFIG.OFFERS.find(x=>x.id==id),m=$('#modal'),per=({w:t('pw'),m:t('pm'),q:t('pq'),l:t('pl2')})[o.per];
+ const msg=t('msg').replace('{o}',t(id).replace(/^[^—-]*[—-]\s*/,'')).replace('{p}',o.price).replace('{u}',user.name);
+ m.classList.remove('hidden');
+ m.innerHTML=`<div class="abox glass"><button class="x" id="mx">✕</button><h1 style="font-size:22px">${t('tk')}</h1><p class="sub" style="font-size:14px">${t('tkS')}</p>
+ <div class="recap"><small>${t('tkO')}</small><div style="font-weight:700;margin-top:6px">BaseV3 · ${esc(t(id))}</div><div class="big">${o.price}€ <span style="font-size:14px;font-family:var(--fb);color:var(--mut);-webkit-text-fill-color:var(--mut)">/ ${per}</span></div></div>
+ <ol class="steps"><li><b>${t('tk1')}</b></li><li>${t('tk2')}</li><li>${t('tk3')}</li><li>${t('tk4')}</li></ol>
+ <div class="msgbox" id="bMsg">${esc(msg)}</div>
+ <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn" style="text-decoration:none;flex:1;text-align:center;background:#5865f2" href="${CONFIG.DISCORD_INVITE}" target="_blank" rel="noopener">🎮 ${t('join')}</a><button class="btn ghost" id="bCopy" style="flex:1">${t('copy')}</button></div></div>`;
+ $('#mx').onclick=()=>m.classList.add('hidden');m.onclick=e=>{if(e.target==m)m.classList.add('hidden')};
+ $('#bCopy').onclick=async()=>{const b=$('#bCopy');try{await navigator.clipboard.writeText(msg)}catch(e){const r=document.createRange();r.selectNodeContents($('#bMsg'));const sl=getSelection();sl.removeAllRanges();sl.addRange(r)}b.textContent=t('copied');setTimeout(()=>b.textContent=t('copy'),1800)};
+}
+/* actualisation en direct (statut + joueurs) */
+setInterval(async()=>{
+ if(!user||page!='dash'||!$('#modal').classList.contains('hidden'))return;
+ try{servers=await api('/servers');draw()}catch(e){}
+},15000);
+/* init */
+drawAuth();
+if(/[?&]e=/.test(location.search)){$('#aErr').textContent=lang=='fr'?'Connexion Discord impossible, réessaie.':'Discord login failed, try again.';history.replaceState(null,'','/')}
+api('/me').then(start).catch(()=>{});
+</script>
+</body>
+</html>
